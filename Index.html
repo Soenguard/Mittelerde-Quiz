@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mittelerde Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      font-size: 18px;
+    }
+    .quiz-container button {
+      padding: 10px;
+      margin: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .quiz-container button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      font-size: 22px;
+      font-weight: bold;
+      color: #4CAF50;
+      margin-top: 20px;
+    }
+    .background {
+      background-image: url('https://www.w3schools.com/w3images/forest.jpg'); /* Neues öffentlich zugängliches Bild */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body class="background">
+
+  <div class="quiz-container" id="quiz-container">
+    <h2>Frage 1:</h2>
+    <p>Welche Region bereist du am liebsten?</p>
+    <button onclick="handleAnswer('A')">Auenland</button>
+    <button onclick="handleAnswer('B')">Rohan</button>
+    <button onclick="handleAnswer('C')">Mordor</button>
+    <button onclick="handleAnswer('D')">Bruchtal</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Welche Region bereist du am liebsten?",
+        answers: ["Auenland", "Rohan", "Mordor", "Bruchtal"],
+        values: ["A", "B", "C", "D"]
+      },
+      {
+        question: "Welche Rolle passt am besten zu deinem Spielstil?",
+        answers: ["Barde", "Wächter", "Schurke", "Runenbewahrer"],
+        values: ["A", "B", "C", "D"]
+      },
+      {
+        question: "Was ist dir bei deinen Gefährten am wichtigsten?",
+        answers: ["Loyalität", "Tapferkeit", "Witz", "Weisheit"],
+        values: ["A", "B", "C", "D"]
+      },
+      {
+        question: "Du findest eine geheimnisvolle Tür in einer Höhle. Was tust du?",
+        answers: [
+          "Ich klopfe höflich an.",
+          "Ich öffne sie sofort.",
+          "Ich untersuche erst die Umgebung.",
+          "Ich komme mit Gefährten wieder."
+        ],
+        values: ["A", "B", "C", "D"]
+      },
+      {
+        question: "Was ist deine größte Stärke in Mittelerde?",
+        answers: [
+          "Meine Treue zu Freunden.",
+          "Mein Mut.",
+          "Mein Einfallsreichtum.",
+          "Mein Wissen."
+        ],
+        values: ["A", "B", "C", "D"]
+      }
+    ];
+
+    const results = {
+      A: {
+        name: "Samweis Gamdschie",
+        description:
+          "Der treuste Gefährte. Sam lädt dich auf eine Tasse Tee im Auenland ein und zeigt dir seinen geheimen Garten."
+      },
+      B: {
+        name: "Aragorn",
+        description:
+          "Der König in spe begrüßt dich als würdigen Mitstreiter. Gemeinsam reitet ihr durch die Ebenen Rohans."
+      },
+      C: {
+        name: "Legolas",
+        description:
+          "Der geheimnisvolle Elb erkennt deinen Scharfsinn. Er zeigt dir verborgene Geheimnisse der Elben."
+      },
+      D: {
+        name: "Gandalf",
+        description:
+          "Der Graue Wanderer sieht in dir großes Potenzial. Ihr sprecht über Magie und das Schicksal Mittelerdes."
+      }
+    };
+
+    let currentStep = 0;
+    let answers = [];
+
+    function showQuestion() {
+      if (currentStep < questions.length) {
+        const question = questions[currentStep];
+        const container = document.getElementById("quiz-container");
+        container.innerHTML = `
+          <h2>Frage ${currentStep + 1}:</h2>
+          <p>${question.question}</p>
+          ${question.answers
+            .map(
+              (answer, index) => `<button onclick="handleAnswer('${question.values[index]}')">${answer}</button>`
+            )
+            .join('')}
+        `;
+      } else {
+        showResult();
+      }
+    }
+
+    function handleAnswer(value) {
+      answers.push(value);
+      currentStep++;
+      showQuestion();
+    }
+
+    function showResult() {
+      const result = getResult();
+      const container = document.getElementById("quiz-container");
+      container.innerHTML = `
+        <h2>Deine Belohnung:</h2>
+        <p class="result">${result.name}</p>
+        <p>${result.description}</p>
+      `;
+      const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+      audio.play();
+    }
+
+    function getResult() {
+      const count = { A: 0, B: 0, C: 0, D: 0 };
+      answers.forEach(a => count[a]++);
+      const most = Object.entries(count).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+      return results[most];
+    }
+
+    showQuestion(); // Start the game
+  </script>
+
+</body>
+</html>
